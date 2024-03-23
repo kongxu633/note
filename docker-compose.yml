@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  swag:
+    container_name: swag
+    image: lscr.io/linuxserver/swag:latest
+    restart: unless-stopped
+    ports:
+      - 443:443
+      - 80:80 #optional
+    volumes:
+      - /data/config:/config
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    logging:
+      driver: "none"
+      # driver: "json-file"
+      # options:
+      #   max-size: "10m"
+      #   max-file: "3"
+
+networks:
+  default:
+    external: true
+    name: swag_proxy # docker network create swag_proxy
