@@ -1,0 +1,45 @@
+# from https://blognas.hwb0307.com/other/5456
+
+
+version: '3'
+ 
+services:
+  joplin-db:
+    image: postgres:15
+    container_name: joplin-db
+    restart: unless-stopped
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    expose:
+      - "5432"
+    environment:
+      - POSTGRES_PASSWORD="Joplin!Password"
+      - POSTGRES_USER=joplin
+      - POSTGRES_DB=joplin
+    networks:
+      - default
+
+  joplin-app:
+    image: joplin/server:latest
+    container_name: joplin-app
+    restart: unless-stopped
+    expose:
+      - "22300"
+    environment:
+      - APP_PORT=22300
+      - APP_BASE_URL=https://joplin.hwb0307.com # your domain
+      - DB_CLIENT=pg
+      - POSTGRES_PASSWORD="Joplin!Password"
+      - POSTGRES_DATABASE=joplin
+      - POSTGRES_USER=joplin
+      - POSTGRES_PORT=5432
+      - POSTGRES_HOST=joplin-db
+      - TZ=Asia/Shanghai
+    depends_on:
+      - db
+    networks:
+      - default
+ 
+networks:
+  default:
+    name: npm_default
