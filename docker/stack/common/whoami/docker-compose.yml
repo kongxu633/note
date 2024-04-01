@@ -1,0 +1,19 @@
+# from https://github.com/traefik/whoami
+#
+# docker network create npm_network
+# docker network inspect npm_network
+# curl 172.18.0.2:2001
+
+services:
+  whoami:
+    container_name: whoami
+    image: traefik/whoami
+    restart: unless-stopped
+    command:
+      # It tells whoami to start listening on 2001 instead of 80
+      - --port=2001
+      - --name=iamfoo
+networks:
+  default:
+    name: npm_network
+    external: true

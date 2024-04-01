@@ -1,0 +1,30 @@
+# from https://nginxproxymanager.com/setup/
+# 
+# Default Administrator User
+# Email:    admin@example.com
+# Password: changeme
+
+services:
+  app:
+    container_name: nginx-proxy-manager
+    image: jc21/nginx-proxy-manager:latest
+    restart: unless-stopped
+    environment:
+      # PUID: 1000
+      # PGID: 1000
+      TZ: Asia/Shanghai
+      DISABLE_IPV6: true
+      # DB_SQLITE_FILE: ./data/database.sqlite
+      # X_FRAME_OPTIONS: sameorigin
+    network_mode: host
+    # ports:
+      # - 80:80
+      # - 81:81
+      # - 443:443
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+    healthcheck:
+      test: ["CMD", "/usr/bin/check-health"]
+      interval: 10s
+      timeout: 3s
